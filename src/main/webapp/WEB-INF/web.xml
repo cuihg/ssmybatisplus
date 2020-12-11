@@ -1,0 +1,71 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <!--配置前端控制器-->
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--指定spring配置文件-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/applicationContext.xml</param-value>
+  </context-param>
+
+  <!--配置编码过滤器(过滤器必须要写在上面，因为有缓存)-->
+  <filter>
+    <filter-name>characterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <!-- 改变现有编码方式为 -->
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <!-- 任何情况下强制使用此编码 -->
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+
+  <!-- 将POST请求转化为DELETE或者是PUT 要用_method指定真正的请求参数 -->
+  <filter>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>HiddenHttpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--监听器-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param><!--配置文件主要配置处理器映射器、适配器等等-->
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc/springMvc.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <!-- url-pattern:三种配置方式
+         1.*.do 访问吧以*.do结尾的请求由DispatcherServlet来解析
+         2./ 所有请求包括静态资源(js、css、image等等)都由DispatcherServlet解析，对于静态文件的解析需要配置不让DispatcherServlet解析
+         3./* 这种配置方式不对   -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+</web-app>
